@@ -39,7 +39,7 @@ and why the example is scored the way it is.
 
         Vocabulary Table
         | Japanese	 | Romanji	| English |
-        |            | kuma	    |bear |
+        |            | kuma	    | bear |
         |            | tobira	| door |
         |            | mimi	    | ear (hear/listen) |
         |            | dasu	    | take out |
