@@ -114,7 +114,7 @@ and why the example is scored the way it is.
 
         Possible sentence structure:
         1. First sentence: [Location] + [Subject] + [exists]
-        2. Second sentence: [Object] + [verb(past)]?
+        2. Second sentence: [Object] + [verb]?
 
         Clues:
         1. For the first part, think about where the bears are. You'll need a location particle to mark where they are.
