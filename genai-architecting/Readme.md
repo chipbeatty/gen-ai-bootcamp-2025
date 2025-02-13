@@ -46,5 +46,3 @@ The company serves **300 active students**, all of whom are located within **Nag
 ✅ Select and validate the open-source LLM
 
 ---
-
-This version is **cleaner, properly formatted**, and **more professional**. Let me know if you need any more refinements! 🚀
