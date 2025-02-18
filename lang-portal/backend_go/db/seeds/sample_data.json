@@ -1,0 +1,45 @@
+{
+  "groups": [
+    {
+      "name": "Basic Latin Vocabulary"
+    },
+    {
+      "name": "Common Verbs"
+    },
+    {
+      "name": "Nouns and Adjectives"
+    }
+  ],
+  "words": [
+    {
+      "latin_word": "amare",
+      "english_translation": "to love",
+      "parts": {
+        "type": "verb",
+        "conjugation": 1,
+        "principal_parts": ["amo", "amare", "amavi", "amatus"]
+      },
+      "groups": ["Basic Latin Vocabulary", "Common Verbs"]
+    },
+    {
+      "latin_word": "videre",
+      "english_translation": "to see",
+      "parts": {
+        "type": "verb",
+        "conjugation": 2,
+        "principal_parts": ["video", "videre", "vidi", "visus"]
+      },
+      "groups": ["Basic Latin Vocabulary", "Common Verbs"]
+    },
+    {
+      "latin_word": "puer",
+      "english_translation": "boy",
+      "parts": {
+        "type": "noun",
+        "declension": 2,
+        "gender": "masculine"
+      },
+      "groups": ["Basic Latin Vocabulary", "Nouns and Adjectives"]
+    }
+  ]
+}
