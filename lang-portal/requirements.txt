@@ -1,0 +1,13 @@
+# Web Framework
+streamlit==1.31.1
+
+# AI/ML
+openai==1.12.0
+
+# Data Processing
+pandas==2.2.0
+
+# Utils
+python-dotenv==1.0.0
+
+# Add other project dependencies below this line
