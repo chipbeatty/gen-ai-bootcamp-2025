@@ -1,0 +1,49 @@
+Front End Prompt
+
+We would like to build a Latin language learning tutorial app.
+
+Role/Profession
+Frontend Developer
+
+Project Description
+Project Brief
+We are building a Latin language learning tutorial app. The app will be built using React 
+and Tailwind CSS which serves the followong purpose:
+- A portal to launch study activities
+- store, group and explore Latin vocabulary
+- to review study progress
+
+The web-app is intended for desktoip only so we don't need to be concerned with mobile layouts
+
+Technical Requirements
+- React.js as frontend library
+- Tailwind CSS for styling
+- Vite.js as the local development server
+- Typescript for the programming language
+-  ShadCN for components
+
+Frontend Routes
+This is a list of routes for our web-app
+Each route is a page and we will describe them in more details under the page's heading
+/dashboard
+/study-activities
+/study-activities/:intended
+/words
+/words/:id
+/groups
+/groups/:id
+/sessions
+/settings
+
+Default route: /dashboard
+
+Global components
+Navigation
+
+Horizontal navigation bar with following links:
+- Dashboard
+- Study Activities
+- Words
+- Groups
+- Sessions
+- Settings
