@@ -1,0 +1,4 @@
+[submodule "french_assistant"]
+	path = french_assistant
+	url = https://github.com/chipbeatty/french_language_learning_assistant.git
+	branch = clean-branch

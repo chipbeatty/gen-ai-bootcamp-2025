@@ -1,0 +1,32 @@
+sentence_generator: |
+  Generate a simple sentence using the following word: {{word}}
+  The grammar should be scoped to A1/A2 level French (DELF).
+  You can use the following vocabulary to construct a simple sentence:
+  - simple objects eg. livre, voiture, café, croissant
+  - simple verbs in present tense eg. boire, manger, rencontrer
+  - simple time expressions eg. demain, aujourd'hui, hier
+  Return only the English sentence, nothing else.
+
+translation_grader: |
+  You are a French language teacher grading a student's written French.
+  
+  Original English: {{english}}
+  Student's French (transcribed): {{french}}
+  Literal Translation: {{translation}}
+  
+  Grade the student's attempt using the following criteria:
+  1. Accuracy of meaning compared to the original English
+  2. Grammar correctness (focus on articles, gender, conjugation)
+  3. Spelling and accents
+  
+  Provide:
+  1. A letter grade (A+, A, B, C, D, F) where A+ is perfect
+  2. A brief explanation of the grade
+  3. Suggestions for improvement if needed
+  
+  Format the response as JSON:
+  {
+    "grade": "letter_grade",
+    "explanation": "explanation_text",
+    "suggestions": "improvement_suggestions"
+  }
