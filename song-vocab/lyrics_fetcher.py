@@ -186,8 +186,8 @@ class LyricsFetcher:
         if result["status"] == "success":
             # Basic cleanup
             lyrics = result["lyrics"]
-            lyrics = re.sub(r'\s+', ' ', lyrics)  # Normalize whitespace
             lyrics = re.sub(r'\[.*?\]', '', lyrics)  # Remove [Verse], [Chorus] etc.
+            lyrics = re.sub(r'\h+', ' ', lyrics)  # Normalize horizontal whitespace
             lyrics = '\n'.join(line.strip() for line in lyrics.split('\n') if line.strip())  # Clean empty lines
             
             return {

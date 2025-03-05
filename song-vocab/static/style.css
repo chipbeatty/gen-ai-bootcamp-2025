@@ -1,0 +1,53 @@
+/* Custom styles */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.lyrics-section pre {
+    white-space: pre-wrap;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+}
+
+.vocabulary-item {
+    padding: 1.25rem;
+    background-color: #f8fafc;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.word-line, .translation-line, .context-line {
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+}
+
+.word-line {
+    font-weight: 500;
+}
+
+.vocabulary-word {
+    color: #4f46e5;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.vocabulary-translation {
+    color: #1a1a1a;
+    font-weight: 500;
+}
+
+.vocabulary-context {
+    color: #4b5563;
+    font-style: italic;
+}
+
+/* Loading animation */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
