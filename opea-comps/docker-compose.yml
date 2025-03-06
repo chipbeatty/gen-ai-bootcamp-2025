@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "8008:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - ai_network
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=voicechat
+      - POSTGRES_PASSWORD=voicechat
+      - POSTGRES_DB=voicechat
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - ai_network
+
+  chat_service:
+    build: .
+    ports:
+      - "8889:8888"  # Changed host port to 8889
+    environment:
+      - LLM_MODEL_ID=${LLM_MODEL_ID:-llama2:7b}
+      - LLM_ENDPOINT=http://ollama:11434
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=postgresql://voicechat:voicechat@postgres:5432/voicechat  # Note: Inside Docker network, still use 5432
+    volumes:
+      - ./audio:/app/audio
+    depends_on:
+      - ollama
+      - postgres
+    networks:
+      - ai_network
+
+volumes:
+  ollama_data:
+  postgres_data:
+
+networks:
+  ai_network:
+    driver: bridge

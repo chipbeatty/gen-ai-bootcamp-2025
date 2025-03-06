@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Chat Interface</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div id="app" class="container mx-auto px-4 py-8 max-w-6xl">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h1 class="text-3xl font-bold mb-8">Voice Chat Interface</h1>
+            
+            <!-- Chat Messages -->
+            <div class="mb-6 h-[300px] overflow-y-auto bg-gray-50 rounded p-4" ref="chatContainer">
+                <div v-for="msg in messages" :key="msg.id" 
+                     :class="{'mb-4': true, 'text-right': msg.role === 'user'}">
+                    <div :class="{
+                        'inline-block p-3 rounded-lg max-w-[80%]': true,
+                        'bg-blue-500 text-white': msg.role === 'user',
+                        'bg-gray-200': msg.role === 'assistant'
+                    }">
+                        <div class="text-sm font-semibold mb-1">{{ msg.role }}</div>
+                        <div>{{ msg.content }}</div>
+                    </div>
+                </div>
+                <div v-if="isStreaming" class="text-gray-500">
+                    Assistant is typing...
+                </div>
+            </div>
+
+            <!-- Voice Controls -->
+            <div class="flex gap-4 mb-6">
+                <button @click="toggleRecording" 
+                        :class="{
+                            'px-4 py-2 rounded-lg font-semibold': true,
+                            'bg-red-500 text-white': isRecording,
+                            'bg-blue-500 text-white': !isRecording
+                        }">
+                    {{ isRecording ? 'Stop Recording' : 'Start Recording' }}
+                </button>
+                <div v-if="isRecording" class="flex items-center text-red-500">
+                    Recording... {{ recordingTime }}s
+                </div>
+            </div>
+
+            <!-- Text Input -->
+            <div class="flex gap-4">
+                <input v-model="userInput" 
+                       @keyup.enter="sendMessage"
+                       class="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       placeholder="Type a message or use voice...">
+                <button @click="sendMessage"
+                        class="px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600">
+                    Send
+                </button>
+            </div>
+        </div>
+
+        <!-- Settings Panel -->
+        <div class="mt-8 bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-bold mb-4">Settings</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Chat Model Settings -->
+                <div>
+                    <label class="block text-sm font-medium mb-2">Chat Model</label>
+                    <select v-model="settings.model" 
+                            class="w-full px-3 py-2 border rounded-lg">
+                        <option value="llama2:7b">Llama 2 (7B)</option>
+                        <option value="llama2:13b">Llama 2 (13B)</option>
+                        <option value="mistral:7b">Mistral (7B)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Temperature</label>
+                    <input type="range" v-model="settings.temperature" 
+                           min="0" max="2" step="0.1"
+                           class="w-full">
+                    <div class="text-sm text-gray-500">{{ settings.temperature }}</div>
+                </div>
+                <!-- Voice Settings -->
+                <div>
+                    <label class="block text-sm font-medium mb-2">Voice Model</label>
+                    <select v-model="settings.voice" 
+                            class="w-full px-3 py-2 border rounded-lg">
+                        <option v-for="(info, id) in voices" :key="id" :value="id">
+                            {{ id }} ({{ info.gender }}, {{ info.accent || info.age }})
+                        </option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Speaking Rate</label>
+                    <input type="range" v-model="settings.speakingRate" 
+                           min="0.5" max="2" step="0.1"
+                           class="w-full">
+                    <div class="text-sm text-gray-500">{{ settings.speakingRate }}x</div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Voice Pitch</label>
+                    <input type="range" v-model="settings.pitch" 
+                           min="-10" max="10" step="1"
+                           class="w-full">
+                    <div class="text-sm text-gray-500">{{ settings.pitch }}</div>
+                </div>
+                <!-- Whisper Model Settings -->
+                <div>
+                    <label class="block text-sm font-medium mb-2">Transcription Model</label>
+                    <select v-model="settings.whisperModel" 
+                            class="w-full px-3 py-2 border rounded-lg">
+                        <option v-for="(info, id) in whisperModels" :key="id" :value="id">
+                            {{ id }} - {{ info.description }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref, onMounted } = Vue
+
+        // Generate a persistent user ID for demo
+        let userId = localStorage.getItem('userId')
+        if (!userId) {
+            userId = 'user_' + Math.random().toString(36).substring(2, 15)
+            localStorage.setItem('userId', userId)
+        }
+        console.log('Using userId:', userId)
+
+        createApp({
+            setup() {
+                const messages = ref([])
+                const userInput = ref('')
+                const isRecording = ref(false)
+                const recordingTime = ref(0)
+                const isStreaming = ref(false)
+                const chatContainer = ref(null)
+                // Default voice settings
+                const DEFAULT_VOICE = 'en-US-Neural2-H'
+                const DEFAULT_RATE = 1.0
+                const DEFAULT_PITCH = 0
+                
+                // Default model settings
+                const DEFAULT_MODEL = 'tinyllama'
+                const DEFAULT_TEMP = 0.7
+                const DEFAULT_WHISPER = 'base'
+                
+                // Combined default settings
+                const defaultSettings = Object.freeze({
+                    model: DEFAULT_MODEL,
+                    temperature: DEFAULT_TEMP,
+                    voice: DEFAULT_VOICE,
+                    speakingRate: DEFAULT_RATE,
+                    pitch: DEFAULT_PITCH,
+                    whisperModel: DEFAULT_WHISPER
+                })
+                
+                // Helper to ensure settings are valid
+                function createValidSettings(overrides = {}) {
+                    return {
+                        model: String(overrides.model ?? defaultSettings.model),
+                        temperature: Number(overrides.temperature ?? defaultSettings.temperature),
+                        voice: String(overrides.voice ?? defaultSettings.voice),
+                        speakingRate: Number(overrides.speakingRate ?? defaultSettings.speakingRate),
+                        pitch: Number(overrides.pitch ?? defaultSettings.pitch),
+                        whisperModel: String(overrides.whisperModel ?? defaultSettings.whisperModel)
+                    }
+                }
+                
+                // Initialize settings with defaults
+                const settings = ref(createValidSettings())
+                const voices = ref({})
+                const whisperModels = ref({})
+                const conversations = ref([])
+
+                let mediaRecorder = null
+                let audioChunks = []
+                let recordingInterval = null
+                let ws = null
+
+                // Track initialization state
+                const isInitialized = ref(false)
+
+                onMounted(async () => {
+                    try {
+                        console.log('Starting app initialization...')
+                        
+                        // Initialize with defaults first
+                        settings.value = structuredClone(defaultSettings)
+                        console.log('Using initial default settings:', settings.value)
+                        
+                        // Setup basic services
+                        setupWebSocket()
+                        
+                        // Load all required data
+                        console.log('Loading voice models...')
+                        await loadVoices()
+                        
+                        console.log('Loading whisper models...')
+                        await loadWhisperModels()
+                        
+                        console.log('Loading user preferences...')
+                        await loadUserPreferences()
+                        
+                        console.log('Loading conversations...')
+                        await loadConversations()
+                        
+                        isInitialized.value = true
+                        console.log('App initialization complete')
+                    } catch (error) {
+                        console.error('Error during initialization:', error)
+                        // Ensure we have valid settings even if initialization fails
+                        settings.value = structuredClone(defaultSettings)
+                    }
+                })
+
+                function setupWebSocket() {
+                    ws = new WebSocket(`ws://${window.location.host}/ws/chat`)
+                    ws.onmessage = handleWebSocketMessage
+                }
+
+                function handleWebSocketMessage(event) {
+                    const data = JSON.parse(event.data)
+                    if (data.type === 'chunk') {
+                        if (!isStreaming.value) {
+                            isStreaming.value = true
+                            messages.value.push({
+                                id: Date.now(),
+                                role: 'assistant',
+                                content: ''
+                            })
+                        }
+                        const lastMessage = messages.value[messages.value.length - 1]
+                        lastMessage.content += data.content
+                        scrollToBottom()
+                    } else if (data.type === 'end') {
+                        isStreaming.value = false
+                    }
+                }
+
+                async function sendMessage() {
+                    const text = userInput.value.trim()
+                    if (!text) return
+
+                    // Add user message
+                    messages.value.push({
+                        id: Date.now(),
+                        role: 'user',
+                        content: text
+                    })
+
+                    // Send to WebSocket with system prompt
+                    ws.send(JSON.stringify({
+                        messages: [
+                            {
+                                role: 'system',
+                                content: 'You are a helpful AI assistant. Give direct, clear answers.'
+                            },
+                            {
+                                role: 'user',
+                                content: text
+                            }
+                        ],
+                        model: settings.value.model,
+                        temperature: parseFloat(settings.value.temperature),
+                        stream: true
+                    }))
+
+                    userInput.value = ''
+                    scrollToBottom()
+                }
+
+                async function toggleRecording() {
+                    if (isRecording.value) {
+                        stopRecording()
+                    } else {
+                        startRecording()
+                    }
+                }
+
+                async function startRecording() {
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({
+                            audio: {
+                                channelCount: 1,          // Mono audio
+                                sampleRate: 16000,        // 16 kHz
+                                sampleSize: 16,           // 16-bit
+                                echoCancellation: true,   // Reduce echo
+                                noiseSuppression: true    // Reduce background noise
+                            }
+                        })
+
+                        // Try to use WAV format if supported
+                        let mimeType = 'audio/wav'
+                        if (!MediaRecorder.isTypeSupported(mimeType)) {
+                            // Fallback to WebM
+                            mimeType = 'audio/webm;codecs=opus'
+                        }
+                        
+                        console.log('Using audio format:', mimeType)
+                        mediaRecorder = new MediaRecorder(stream, {
+                            mimeType: mimeType,
+                            audioBitsPerSecond: 16000    // 16 kbps
+                        })
+                        
+                        audioChunks = []
+                        mediaRecorder.ondataavailable = (event) => {
+                            if (event.data.size > 0) {
+                                audioChunks.push(event.data)
+                            }
+                        }
+
+                        mediaRecorder.onstop = async () => {
+                            const audioBlob = new Blob(audioChunks, { type: mimeType })
+                            console.log('Audio recorded:', {
+                                format: mimeType,
+                                size: audioBlob.size,
+                                chunks: audioChunks.length
+                            })
+                            await transcribeAudio(audioBlob)
+                        }
+
+                        // Request data every second
+                        mediaRecorder.start(1000)
+                        isRecording.value = true
+                        recordingTime.value = 0
+                        recordingInterval = setInterval(() => {
+                            recordingTime.value++
+                        }, 1000)
+                    } catch (error) {
+                        console.error('Error accessing microphone:', error)
+                    }
+                }
+
+                function stopRecording() {
+                    if (mediaRecorder) {
+                        mediaRecorder.stop()
+                        mediaRecorder.stream.getTracks().forEach(track => track.stop())
+                    }
+                    clearInterval(recordingInterval)
+                    isRecording.value = false
+                }
+
+                async function loadVoices() {
+                    try {
+                        const response = await fetch('/api/voices')
+                        voices.value = await response.json()
+                    } catch (error) {
+                        console.error('Error loading voices:', error)
+                    }
+                }
+
+                async function loadWhisperModels() {
+                    try {
+                        const response = await fetch('/api/whisper-models')
+                        whisperModels.value = await response.json()
+                    } catch (error) {
+                        console.error('Error loading whisper models:', error)
+                    }
+                }
+
+                async function loadUserPreferences() {
+                    console.log('Loading preferences for:', userId)
+                    
+                    try {
+                        const response = await fetch(`/api/voice-preference/${userId}`)
+                        console.log('Preferences response status:', response.status)
+                        
+                        if (!response.ok) {
+                            throw new Error(`Failed to load preferences: ${response.status} ${response.statusText}`)
+                        }
+                        
+                        let prefs
+                        try {
+                            prefs = await response.json()
+                            console.log('Raw preferences loaded:', prefs)
+                        } catch (e) {
+                            throw new Error(`Failed to parse preferences: ${e.message}`)
+                        }
+                        
+                        if (!prefs || typeof prefs !== 'object') {
+                            throw new Error('Invalid preferences format')
+                        }
+                        
+                        // Map API response to settings format
+                        const voiceSettings = {
+                            voice: prefs.voice_id,
+                            speakingRate: prefs.speaking_rate,
+                            pitch: prefs.pitch
+                        }
+                        
+                        console.log('Mapped voice settings:', voiceSettings)
+                        
+                        // Create new settings using our validation helper
+                        const newSettings = createValidSettings({
+                            ...settings.value,  // Keep existing settings
+                            ...voiceSettings     // Override with voice settings
+                        })
+                        
+                        console.log('New settings validated:', newSettings)
+                        settings.value = newSettings
+                        
+                        return true
+                    } catch (error) {
+                        console.error('Error in loadUserPreferences:', error)
+                        // Reset to defaults using our validation helper
+                        settings.value = createValidSettings()
+                        return false
+                    }
+                }
+
+                async function loadConversations() {
+                    try {
+                        const response = await fetch(`/api/conversations/${userId}`)
+                        if (response.ok) {
+                            conversations.value = await response.json()
+                        }
+                    } catch (error) {
+                        console.error('Error loading conversations:', error)
+                    }
+                }
+
+                async function transcribeAudio(audioBlob) {
+                    try {
+                        console.log('Preparing audio for transcription...')
+                        
+                        // Ensure we have a valid audio type
+                        if (!audioBlob.type.startsWith('audio/') && !audioBlob.type.startsWith('video/webm')) {
+                            throw new Error(`Invalid audio type: ${audioBlob.type}`)
+                        }
+                        
+                        // Create FormData
+                        const formData = new FormData()
+                        
+                        // Log detailed blob info
+                        console.log('Audio blob details:', {
+                            type: audioBlob.type,
+                            size: audioBlob.size,
+                            lastModified: audioBlob.lastModified
+                        })
+                        
+                        // Always use webm extension for consistency
+                        const file = new File([audioBlob], 'recording.webm', { 
+                            type: 'audio/webm;codecs=opus',
+                            lastModified: new Date().getTime()
+                        })
+                        
+                        console.log('Created File object:', {
+                            name: file.name,
+                            type: file.type,
+                            size: file.size,
+                            lastModified: file.lastModified
+                        })
+                        
+                        // Add file to FormData
+                        formData.append('file', file)
+                        formData.append('model', settings.value.whisperModel)
+                        
+                        // Log FormData contents
+                        console.log('FormData entries:')
+                        for (let [key, value] of formData.entries()) {
+                            console.log(`${key}:`, value instanceof File ? {
+                                name: value.name,
+                                type: value.type,
+                                size: value.size
+                            } : value)
+                        }
+                        
+                        console.log('Sending audio for transcription:', {
+                            format: file.type,
+                            size: file.size,
+                            model: settings.value.whisperModel
+                        })
+                        
+                        // Make the request
+                        console.log('Sending request to /api/audio/transcribe...')
+                        const response = await fetch('/api/audio/transcribe', {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json'
+                            },
+                            body: formData
+                        })
+                        
+                        console.log('Response received:', {
+                            status: response.status,
+                            statusText: response.statusText,
+                            headers: Object.fromEntries(response.headers.entries())
+                        })
+                        
+                        if (!response.ok) {
+                            const errorText = await response.text()
+                            throw new Error(
+                                `Transcription failed (${response.status}): ${errorText}`
+                            )
+                        }
+                        
+                        const result = await response.json()
+                        console.log('Transcription result:', result)
+                        
+                        if (result.text) {
+                            const transcribedText = result.text.trim()
+                            if (transcribedText) {
+                                // Add transcribed text as user message
+                                messages.value.push({
+                                    id: Date.now(),
+                                    role: 'user',
+                                    content: transcribedText
+                                })
+                                
+                                // Send to WebSocket for response
+                                ws.send(JSON.stringify({
+                                    messages: [{
+                                        role: 'user',
+                                        content: transcribedText
+                                    }],
+                                    model: settings.value.model,
+                                    temperature: parseFloat(settings.value.temperature),
+                                    stream: true
+                                }))
+                                
+                                scrollToBottom()
+                            } else {
+                                console.warn('Transcription returned empty text')
+                            }
+                        } else {
+                            throw new Error('No transcription text in response')
+                        }
+                    } catch (error) {
+                        console.error('Error transcribing audio:', error)
+                        // Show error to user
+                        userInput.value = `Error: ${error.message}`
+                    }
+                }
+
+                async function saveConversation() {
+                    if (messages.value.length === 0) return
+
+                    try {
+                        const title = messages.value[0].content.substring(0, 50) + '...'
+                        await fetch(`/api/conversations/${userId}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                title,
+                                messages: messages.value,
+                                model_settings: settings.value
+                            })
+                        })
+                        await loadConversations()
+                    } catch (error) {
+                        console.error('Error saving conversation:', error)
+                    }
+                }
+
+                async function saveVoicePreferences() {
+                    try {
+                        await fetch(`/api/voice-preference/${userId}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                voice_id: settings.value.voice,
+                                speaking_rate: settings.value.speakingRate,
+                                pitch: settings.value.pitch
+                            })
+                        })
+                    } catch (error) {
+                        console.error('Error saving preferences:', error)
+                    }
+                }
+
+                async function transcribeAudio(audioBlob) {
+                    const formData = new FormData()
+                    formData.append('file', audioBlob, 'recording.webm')
+                    formData.append('model', settings.value.whisperModel)
+
+                    try {
+                        console.log('Sending audio for transcription...')
+                        const response = await fetch('/api/audio/transcribe', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`)
+                        }
+                        const data = await response.json()
+                        userInput.value = data.text
+                    } catch (error) {
+                        console.error('Error transcribing audio:', error)
+                    }
+                }
+
+                function scrollToBottom() {
+                    if (chatContainer.value) {
+                        setTimeout(() => {
+                            chatContainer.value.scrollTop = chatContainer.value.scrollHeight
+                        }, 50)
+                    }
+                }
+
+                return {
+                    messages,
+                    userInput,
+                    isRecording,
+                    recordingTime,
+                    isStreaming,
+                    settings,
+                    voices,
+                    whisperModels,
+                    conversations,
+                    chatContainer,
+                    sendMessage,
+                    toggleRecording,
+                    saveVoicePreferences,
+                    saveConversation
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>

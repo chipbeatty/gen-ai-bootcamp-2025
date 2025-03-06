@@ -1,79 +1,110 @@
 # French Song Vocabulary Builder
 
-A tool that helps language learners build their French vocabulary through popular French songs. This project uses modern AI tools and language models to create an enriched learning experience.
+A tool that helps language learners build their French vocabulary through popular French songs. I've built this as part of the Codeium GenAI Bootcamp, with some key differences from the original project design.
 
 ## Project Overview
-This application finds French song lyrics, extracts vocabulary, and provides detailed language learning insights using AI. Unlike traditional vocabulary builders, this tool focuses on French music context, cultural nuances, and modern French usage.
+This application finds French song lyrics and extracts useful vocabulary with translations and context. It uses direct web scraping of lyrics sites combined with local AI for vocabulary analysis.
 
-## Key Features (Planned)
-- Search and fetch French song lyrics
-- Extract vocabulary with contextual meanings
-- Provide difficulty ratings for vocabulary
-- Include cultural context and usage notes
-- Support for various French dialects (France, Quebec, etc.)
-- AI-powered example sentence generation
+## Key Features
+- Search and fetch French song lyrics from paroles.net
+- Extract vocabulary with translations and contextual examples
+- Clean, readable UI optimized for desktop viewing
+- Local AI processing using Ollama/Mistral for vocabulary analysis
 
-## Technical Concerns and Obstacles
+## Implementation Details
 
-I anticipate several challenges in developing this project:
+### Key Differences from Original Design
+1. **Lyrics Fetching**
+   - Switched from SerpAPI to direct web scraping
+   - Focused on paroles.net as primary source after testing multiple sites
+   - Implemented robust HTML parsing with BeautifulSoup
 
-1. **Lyric Accuracy**
-   - French songs often have multiple versions and interpretations
-   - Need to handle accents and special characters correctly
-   - Regional variations in lyrics might exist
+2. **AI Integration**
+   - Using local Ollama/Mistral instead of OpenAI
+   - Custom prompt engineering for vocabulary extraction
+   - No RAG or embeddings - keeping it simple and effective
 
-2. **Language Processing**
-   - French word conjugations are complex
-   - Need to handle contractions (l', d', etc.)
-   - Identifying slang and colloquial expressions
-   - Dealing with verlan (French word inversion slang)
+3. **User Interface**
+   - Optimized for readability with wide layout
+   - No scrolling sections - full content display
+   - Three-line vocabulary format for clear presentation
 
-3. **AI Integration**
-   - Ensuring accurate context-aware translations
-   - Balancing processing speed with accuracy
-   - Managing API costs and rate limits
-   - Handling model biases in language processing
+### Agent Implementation
+I used a LangChain agent with Ollama/Mistral to coordinate the lyrics fetching process. The agent orchestrates several custom tools:
 
-4. **Data Quality**
-   - Verifying the reliability of lyrics sources
-   - Maintaining data freshness
-   - Handling missing or incomplete data
+1. **Search Web Tool**
+   - Searches for French lyrics using formatted queries
+   - Handles URL patterns for different lyrics sites
+   - Returns potential lyrics page URLs
 
-## Unique Approaches and Enhancements
+2. **Get Page Content Tool**
+   - Fetches webpage content with proper headers
+   - Handles rate limiting and retries
+   - Manages character encoding for French text
 
-To make this project distinct, I plan to incorporate:
+3. **Extract Lyrics Tool**
+   - Uses BeautifulSoup to parse HTML
+   - Identifies lyrics containers using site-specific patterns
+   - Cleans up annotations and formatting
 
-1. **LangChain Integration**
-   - Use LangChain's agents for sophisticated web scraping
-   - Implement conversation chains for interactive learning
-   - Leverage memory components for user progress tracking
-   - Create custom tools for French language processing
+4. **Clean Lyrics Tool**
+   - Removes unwanted sections ([Verse], [Chorus], etc.)
+   - Normalizes whitespace and line breaks
+   - Preserves French accents and special characters
 
-2. **Advanced AI Features**
-   - Implement RAG (Retrieval Augmented Generation) for accurate cultural context
-   - Use embeddings to find similar vocabulary across different songs
-   - Create custom prompts for French-specific language patterns
+### RAG System
+I implemented a simple but effective RAG approach for vocabulary extraction:
 
-3. **Learning Enhancements**
-   - Difficulty progression system
-   - Spaced repetition integration
-   - Cultural context annotations
-   - Pronunciation guidance using IPA
+1. **Retrieval**
+   - Extract full context lines from lyrics
+   - Maintain line breaks and formatting
+   - Preserve song structure for context
+
+2. **Augmentation**
+   - Custom prompt engineering for vocabulary identification
+   - French language expertise built into prompts
+   - Example-based formatting for consistent output
+
+3. **Generation**
+   - Structured vocabulary output with translations
+   - Context-aware word selection
+   - Focus on learner-appropriate vocabulary
+
+### Technical Challenges Solved
+
+1. **Rate Limiting**
+   - Initially hit 403/404 errors with lyrics sites
+   - Added proper user agent headers
+   - Implemented URL pattern matching for different sites
+
+2. **Content Extraction**
+   - Developed specific HTML parsing for lyrics containers
+   - Added cleanup for annotations and extra whitespace
+   - Fixed character encoding for French accents
+
+3. **AI Response Formatting**
+   - Structured prompt to ensure consistent vocabulary format
+   - Added streaming response handling for Ollama
+   - Improved error handling for AI responses
 
 ## Technical Stack
-- FastAPI
-- LangChain
-- Ollama with Mistral 7B
-- SQLite3
-- Custom French language processing tools
-- Vector database for semantic search
+- FastAPI for backend API
+- Ollama with Mistral 7B for local AI
+- BeautifulSoup4 for HTML parsing
+- Tailwind CSS for styling
+- Custom tools for lyrics fetching and vocabulary extraction
 
-## Next Steps
-1. Set up basic project structure
-2. Implement core lyric fetching functionality
-3. Develop French-specific vocabulary extraction
-4. Add LangChain agents and tools
-5. Create cultural context enhancement features
+## Setup and Usage
+1. Install dependencies: `pip install -r requirements.txt`
+2. Make sure Ollama is running with Mistral model
+3. Run the app: `python main.py`
+4. Open browser and search for your favorite French songs
+
+## Future Improvements
+1. Add support for more lyrics sites
+2. Implement caching for frequently requested songs
+3. Add difficulty ratings for vocabulary
+4. Include pronunciation guidance
 
 ## Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
+Feel free to submit issues or pull requests if you have suggestions for improvements!
