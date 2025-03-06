@@ -1,0 +1,20 @@
+[server]
+runOnSave = true
+port = 8501
+enableCORS = false
+enableXsrfProtection = false
+maxUploadSize = 200
+
+[browser]
+serverAddress = "localhost"
+gatherUsageStats = false
+
+[runner]
+fastReruns = true
+
+[client]
+toolbarMode = "minimal"
+showErrorDetails = true
+
+[logger]
+level = "error"
