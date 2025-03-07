@@ -7,8 +7,10 @@ import (
 
 type Word struct {
 	ID                int             `json:"id"`
-	LatinWord         string          `json:"latin_word"`
+	FrenchWord        string          `json:"french_word"`
 	EnglishTranslation string         `json:"english_translation"`
+	Context          string          `json:"context,omitempty"`
+	PronunciationURL  string          `json:"pronunciation_url,omitempty"`
 	Parts            json.RawMessage  `json:"parts"`
 	CorrectCount     int             `json:"correct_count"`
 	WrongCount       int             `json:"wrong_count"`
@@ -27,7 +29,7 @@ func GetWords(page, itemsPerPage int) (*WordPagination, error) {
 	offset := (page - 1) * itemsPerPage
 
 	query := `
-		SELECT w.id, w.latin_word, w.english_translation, w.parts,
+		SELECT w.id, w.french_word, w.english_translation, w.context, w.pronunciation_url, w.parts,
 			   COUNT(CASE WHEN wri.correct = 1 THEN 1 END) as correct_count,
 			   COUNT(CASE WHEN wri.correct = 0 THEN 1 END) as wrong_count
 		FROM words w
@@ -44,7 +46,7 @@ func GetWords(page, itemsPerPage int) (*WordPagination, error) {
 	var words []Word
 	for rows.Next() {
 		var w Word
-		if err := rows.Scan(&w.ID, &w.LatinWord, &w.EnglishTranslation, &w.Parts,
+		if err := rows.Scan(&w.ID, &w.FrenchWord, &w.EnglishTranslation, &w.Context, &w.PronunciationURL, &w.Parts,
 			&w.CorrectCount, &w.WrongCount); err != nil {
 			return nil, err
 		}
@@ -72,7 +74,7 @@ func GetWords(page, itemsPerPage int) (*WordPagination, error) {
 // GetWordByID retrieves a single word by its ID
 func GetWordByID(id int) (*Word, error) {
 	query := `
-		SELECT w.id, w.latin_word, w.english_translation, w.parts,
+		SELECT w.id, w.french_word, w.english_translation, w.context, w.pronunciation_url, w.parts,
 			   COUNT(CASE WHEN wri.correct = 1 THEN 1 END) as correct_count,
 			   COUNT(CASE WHEN wri.correct = 0 THEN 1 END) as wrong_count
 		FROM words w

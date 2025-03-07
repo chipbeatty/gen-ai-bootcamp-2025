@@ -90,7 +90,7 @@ func main() {
 	)
 
 	// Start the server
-	if err := r.Run(":8081"); err != nil {
+	if err := r.Run(":8080"); err != nil {
 		log.Fatal("Failed to start server:", err)
 	}
 }

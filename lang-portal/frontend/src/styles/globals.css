@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Ensure content sections display at full height without scrolling */
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* Wide layout optimization */
+.content-wrapper {
+  @apply max-w-6xl mx-auto;
+}
+
+/* Vocabulary item styling */
+.vocab-item {
+  @apply p-5 mb-4;
+}
