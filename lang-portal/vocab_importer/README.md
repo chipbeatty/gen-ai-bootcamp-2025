@@ -4,6 +4,23 @@
 
 This tool is part of the French Vocabulary Builder project, designed to help teachers and content creators generate high-quality French vocabulary content for their students. It uses OpenAI's GPT model to create contextually relevant vocabulary with proper French forms, pronunciations, and authentic usage examples.
 
+## Screenshots
+
+### 1. Main Interface
+
+![Main Interface](optimized_screenshots/main_interface.png)
+_The main interface shows the topic selection, word type options, and number of words to generate._
+
+### 2. Generated Vocabulary Preview
+
+![Vocabulary Preview](optimized_screenshots/vocab_preview.png)
+_Side-by-side view of the generated JSON and how it will appear in the main application._
+
+### 3. Import Functionality
+
+![Import Interface](optimized_screenshots/import_interface.png)
+_The import interface allows reviewing and importing existing vocabulary files._
+
 ## Workflow
 
 1. **Content Creation (Teachers/Educators)**:
@@ -76,33 +93,20 @@ vocab_importer/
 └── sample_data/       # Example vocabulary files
 ```
 
-## Screenshots
-
-### 1. Main Interface
-
-![Main Interface](vocab_importer/docs/screenshots/main_interface.png)
-_The main interface shows the topic selection, word type options, and number of words to generate._
-
-### 2. Generated Vocabulary Preview
-
-![Vocabulary Preview](vocab_importer/docs/screenshots/vocab_preview.png)
-_Side-by-side view of the generated JSON and how it will appear in the main application._
-
-### 3. Import Functionality
-
-![Import Interface](vocab_importer/docs/screenshots/import_interface.png)
-_The import interface allows reviewing and importing existing vocabulary files._
-
 ## Features
 
 - Generate French vocabulary with proper forms:
   - Nouns: Include gender (masculine/feminine)
   - Verbs: Present tense and infinitive forms
   - Adjectives: Masculine and feminine forms
-- Includes pronunciation tips
-- Provides authentic French example sentences
+- Include part of speech information
+- Provide authentic French example sentences with translations
+- Include pronunciation audio URLs (integration with text-to-speech)
+- Export generated vocabulary to JSON files
+- Import existing vocabulary from JSON files
+- Filter by word types (Nouns, Verbs, Adjectives, etc.)
+- Customizable number of words and topics
 - Real-time preview of how vocabulary will appear in the main application
-- Import/Export functionality for vocabulary management
 
 ## Setup and Installation
 
@@ -156,30 +160,3 @@ _The import interface allows reviewing and importing existing vocabulary files._
    - Verify the content before sharing with students
    - Make any necessary adjustments to the vocabulary
 
-## Features
-
-- Generate French vocabulary with proper forms:
-  - Nouns: Include gender (masculine/feminine)
-  - Verbs: Present tense and infinitive forms
-  - Adjectives: Masculine and feminine forms
-- Include part of speech information
-- Provide authentic French example sentences with translations
-- Include pronunciation audio URLs (integration with text-to-speech)
-- Export generated vocabulary to JSON files
-- Import existing vocabulary from JSON files
-- Filter by word types (Nouns, Verbs, Adjectives, etc.)
-- Customizable number of words and topics
-
-## Usage
-
-1. Enter a French-related topic (e.g., "Family Terms", "Daily Activities", "Food and Dining")
-2. Select the desired word type (Nouns, Verbs, Adjectives, etc.)
-3. Choose the number of words to generate
-4. Click "Generate Vocabulary" to create new Latin vocab words
-5. Review the generated vocabulary, including:
-   - Word forms and grammatical information
-   - English definitions
-   - Classical Latin example sentences
-   - English translations
-6. Use the Export button to save to JSON
-7. Use the Import tab to load existing vocabulary files
