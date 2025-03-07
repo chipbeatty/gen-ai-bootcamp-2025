@@ -11,15 +11,27 @@ A Streamlit-based web application for practicing French writing and listening sk
 - AI-powered grading and feedback
 - Two practice modes: Writing and Listening
 
+## Screenshots
+
+### 1. Listening Practice
+
+![Listening Practice](writing_practice/docs/screenshots/listening_practice.png)
+
+## 2. Writing Practice
+
+![Writing Practice](writing_practice/docs/screenshots/writing_practice.png)
+
 ## Technical Stack
 
 ### Core Technologies
+
 - Python 3.x
 - Streamlit (Web Interface)
 - OpenAI GPT-3.5 Turbo
 - Google Text-to-Speech (gTTS)
 
 ### Dependencies
+
 - `streamlit`: Web application framework
 - `openai`: OpenAI API integration (v0.28.1)
 - `python-dotenv`: Environment variable management
@@ -31,6 +43,7 @@ A Streamlit-based web application for practicing French writing and listening sk
 ## Setup
 
 1. Install Tesseract OCR:
+
 ```bash
 # On macOS
 brew install tesseract tesseract-lang
@@ -40,22 +53,26 @@ sudo apt-get install tesseract-ocr tesseract-ocr-fra
 ```
 
 2. Create a virtual environment:
+
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
 3. Install dependencies:
+
 ```bash
 pip install -r requirements.txt
 ```
 
 4. Create a `.env` file with your OpenAI API key:
+
 ```
 OPENAI_API_KEY=your_api_key_here
 ```
 
 5. Run the application:
+
 ```bash
 streamlit run app.py
 ```
@@ -63,6 +80,7 @@ streamlit run app.py
 ## Usage
 
 ### Writing Practice
+
 1. Click "Generate New English Sentence" to get a sentence to translate
 2. Write the French translation by hand
 3. Take a photo or scan your writing
@@ -70,6 +88,7 @@ streamlit run app.py
 5. Click "Submit for Review" to get feedback
 
 ### Listening Practice
+
 1. Click "Generate New French Audio" to get a French sentence
 2. Listen to the pronunciation
 3. Type what you hear
@@ -78,11 +97,13 @@ streamlit run app.py
 ## Known Issues and Solutions
 
 ### Environment Setup
+
 - OpenAI API version compatibility (resolved by using v0.28.1)
 - Proxy settings affecting API connections
 - Python package conflicts with audio dependencies
 
 ### Development Issues
+
 - Image processing reliability with different file formats
 - Memory management with audio file generation
 - Session state management in Streamlit

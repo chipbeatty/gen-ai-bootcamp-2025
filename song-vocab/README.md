@@ -17,7 +17,7 @@ This application finds French song lyrics and extracts useful vocabulary with tr
 
 ### 1. Main Interface
 
-![Main Interface](/docs/screenshots/song_vocab_builder.png)
+![Song Vocab](song-vocab/docs/screenshots/song_vocab_builder.png)
 
 ## Implementation Details
 
