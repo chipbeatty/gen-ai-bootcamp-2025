@@ -21,7 +21,7 @@ I took a more streamlined approach compared to the instructor's implementation:
 
 ### 1. Main Interface
 
-![Voice Interface](opea-comps/docs/screenshots/voice_chat_interface.png)
+![Voice Interface](optimized_screenshots/voice_chat_interface.png)
 
 ## User Interface and Interaction
 

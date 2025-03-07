@@ -10,27 +10,27 @@
 
 ### 1. Interface
 
-![Interface](listening-comp/docs/screenshots/interface.png)
+![Interface](optimized_screenshots/interface.png)
 
 ### 2. Raw Transcript
 
-![Raw Transcript](listening-comp/docs/screenshots/raw_transcript.png)
+![Raw Transcript](optimized_screenshots/raw_transcript.png)
 
 ### 3. Structured Data
 
-![Structured Data](listening-comp/docs/screenshots/structured_data.png)
+![Structured Data](docs/screenshots/structured_data.png)
 
 ### 4. Structured Data
 
-![Structured Data](listening-comp/docs/screenshots/structured_data.png)
+![Structured Data](docs/screenshots/structured_data.png)
 
 ### 5. Interactive Data (1)
 
-![Interactive Data (1)](listening-comp/docs/screenshots/interactive_data_1.png)
+![Interactive Data (1)](optimized_screenshots/interactive_learning.png)
 
 ### 5. Interactive Data (2)
 
-![Interactive Data (2)](listening-comp/docs/screenshots/interactive_data_2.png)
+![Interactive Data (2)](optimized_screenshots/interactive_learning_2.png)
 
 ## Tools Used
 
