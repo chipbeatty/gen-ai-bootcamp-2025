@@ -10,16 +10,16 @@ type StudyService struct {
 }
 
 type StudySession struct {
-	ID              int        `json:"id"`
-	GroupID         int        `json:"group_id"`
-	CreatedAt       time.Time  `json:"created_at"`
-	StudyActivityID *int       `json:"study_activity_id,omitempty"`
-	GroupName       string     `json:"group_name"`
+	ID              int       `json:"id"`
+	GroupID         int       `json:"group_id"`
+	CreatedAt       time.Time `json:"created_at"`
+	StudyActivityID *int      `json:"study_activity_id,omitempty"`
+	GroupName       string    `json:"group_name"`
 }
 
 type StudyProgress struct {
-	TotalWordsStudied    int `json:"total_words_studied"`
-	TotalAvailableWords  int `json:"total_available_words"`
+	TotalWordsStudied   int `json:"total_words_studied"`
+	TotalAvailableWords int `json:"total_available_words"`
 }
 
 type QuickStats struct {
@@ -30,11 +30,11 @@ type QuickStats struct {
 }
 
 type WordReviewItem struct {
-	ID              int       `json:"id"`
-	WordID          int       `json:"word_id"`
-	StudySessionID  int       `json:"study_session_id"`
-	Correct         bool      `json:"correct"`
-	CreatedAt       time.Time `json:"created_at"`
+	ID             int       `json:"id"`
+	WordID         int       `json:"word_id"`
+	StudySessionID int       `json:"study_session_id"`
+	Correct        bool      `json:"correct"`
+	CreatedAt      time.Time `json:"created_at"`
 }
 
 func NewStudyService(db *sql.DB) *StudyService {
@@ -92,8 +92,8 @@ func (s *StudyService) GetQuickStats() (*QuickStats, error) {
 	query := `
 		WITH stats AS (
 			SELECT 
-				CAST(SUM(CASE WHEN correct = 1 THEN 1 ELSE 0 END) AS FLOAT) / 
-				CAST(COUNT(*) AS FLOAT) * 100 as success_rate,
+				CAST(CAST(SUM(CASE WHEN correct = 1 THEN 1 ELSE 0 END) AS FLOAT) / 
+				CAST(COUNT(*) AS FLOAT) * 100 AS FLOAT) as success_rate,
 				COUNT(DISTINCT study_session_id) as total_sessions
 			FROM word_review_items
 		),
@@ -108,10 +108,10 @@ func (s *StudyService) GetQuickStats() (*QuickStats, error) {
 			WHERE created_at >= datetime('now', '-30 days')
 		)
 		SELECT 
-			success_rate,
-			total_sessions,
-			active_groups,
-			streak_days
+			CASE WHEN success_rate IS NULL THEN 0 ELSE success_rate END as success_rate,
+			CASE WHEN total_sessions IS NULL THEN 0 ELSE total_sessions END as total_sessions,
+			CASE WHEN active_groups IS NULL THEN 0 ELSE active_groups END as active_groups,
+			CASE WHEN streak_days IS NULL THEN 0 ELSE streak_days END as streak_days
 		FROM stats, active_groups, streak`
 
 	var stats QuickStats

@@ -1,22 +1,26 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/pages/**/*.{js,ts,jsx,tsx}',
+    './src/components/**/*.{js,ts,jsx,tsx}',
+    './src/app/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
       maxWidth: {
-        '6xl': '72rem', // Wide layout as per requirements
+        '6xl': '72rem', // Wide layout to prevent text wrapping
       },
-      padding: {
-        '5': '1.25rem', // Specified padding for vocabulary items
+      spacing: {
+        '5': '1.25rem', // Exact padding for vocabulary items
+        '4': '1rem',   // Exact margin between items
       },
-      margin: {
-        '4': '1rem', // Specified margin between items
+      height: {
+        'screen': '100vh',
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+  ],
 }

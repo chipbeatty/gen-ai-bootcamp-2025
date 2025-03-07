@@ -9,17 +9,17 @@ type GroupService struct {
 }
 
 type Group struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
-	WordCount int `json:"word_count"`
+	ID        int    `json:"id"`
+	Name      string `json:"name"`
+	WordCount int    `json:"word_count"`
 }
 
 type GroupWithWords struct {
 	ID    int    `json:"id"`
 	Name  string `json:"name"`
 	Words []struct {
-		ID                int    `json:"id"`
-		LatinWord         string `json:"latin_word"`
+		ID                 int    `json:"id"`
+		LatinWord          string `json:"latin_word"`
 		EnglishTranslation string `json:"english_translation"`
 	} `json:"words"`
 }
@@ -83,8 +83,8 @@ func (s *GroupService) GetGroupByID(id int) (*GroupWithWords, error) {
 
 	for rows.Next() {
 		var word struct {
-			ID                int    `json:"id"`
-			LatinWord         string `json:"latin_word"`
+			ID                 int    `json:"id"`
+			LatinWord          string `json:"latin_word"`
 			EnglishTranslation string `json:"english_translation"`
 		}
 		if err := rows.Scan(&word.ID, &word.LatinWord, &word.EnglishTranslation); err != nil {
@@ -109,8 +109,8 @@ func (s *GroupService) CreateGroup(name string) (*Group, error) {
 	}
 
 	return &Group{
-		ID:   int(id),
-		Name: name,
+		ID:        int(id),
+		Name:      name,
 		WordCount: 0,
 	}, nil
 }

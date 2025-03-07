@@ -38,6 +38,9 @@ func main() {
 	// Initialize Gin
 	r := gin.New()
 
+	// Serve static files
+	r.Static("/audio", "static/audio")
+
 	// Global middleware
 	r.Use(middleware.Recovery())
 	r.Use(middleware.Logger())

@@ -3,9 +3,10 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"lang-portal/internal/errors"
 	"lang-portal/internal/service"
+
+	"github.com/gin-gonic/gin"
 )
 
 type DashboardHandler struct {
