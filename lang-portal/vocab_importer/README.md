@@ -1,23 +1,27 @@
 # French Vocabulary Importer Tool
 
 ## Purpose
+
 This tool is part of the French Vocabulary Builder project, designed to help teachers and content creators generate high-quality French vocabulary content for their students. It uses OpenAI's GPT model to create contextually relevant vocabulary with proper French forms, pronunciations, and authentic usage examples.
 
 ## Workflow
+
 1. **Content Creation (Teachers/Educators)**:
+
    - Use this tool to generate French vocabulary for specific topics
    - Review and edit the generated content
    - Save vocabulary as JSON files
    - Share files with students or import into the main application
 
 2. **Content Consumption (Students)**:
+
    - Students use the main French Vocabulary Builder application
    - They study vocabulary prepared by their teachers
    - They don't need to interact with this tool directly
 
 3. **Data Flow**:
    ```
-   [Vocab Importer Tool] 
+   [Vocab Importer Tool]
          ↓
    Creates .json files
          ↓
@@ -29,25 +33,28 @@ This tool is part of the French Vocabulary Builder project, designed to help tea
 ## Problems and Solutions
 
 1. **OpenAI API Versioning**:
+
    - Issue: Compatibility problems between different versions of the OpenAI package
    - Solution: Downgraded to openai==0.28.1 for stable functionality
 
 2. **Environment Variables**:
+
    - Issue: Tool needed access to OpenAI API key
    - Solution: Uses parent directory's .env file for consistent configuration
 
 3. **User Experience**:
+
    - Issue: Initial interface was too technical for non-technical users
    - Solution: Added intuitive UI with previews, explanations, and guided workflow
 
 4. **JSON Response Formatting**:
    - Issue: OpenAI responses occasionally contained malformed JSON with unterminated strings or missing braces
-   - Solution: 
-     * Added a system prompt to enforce proper JSON formatting
-     * Implemented automatic retry system (up to 3 attempts)
-     * Enhanced error handling and user feedback
-     * Increased max_tokens to handle larger responses
-     * Added content cleaning before JSON parsing
+   - Solution:
+     - Added a system prompt to enforce proper JSON formatting
+     - Implemented automatic retry system (up to 3 attempts)
+     - Enhanced error handling and user feedback
+     - Increased max_tokens to handle larger responses
+     - Added content cleaning before JSON parsing
 
 ## Tools and Technologies
 
@@ -72,20 +79,19 @@ vocab_importer/
 ## Screenshots
 
 ### 1. Main Interface
+
 ![Main Interface](docs/screenshots/main_interface.png)
-*The main interface shows the topic selection, word type options, and number of words to generate.*
+_The main interface shows the topic selection, word type options, and number of words to generate._
 
 ### 2. Generated Vocabulary Preview
+
 ![Vocabulary Preview](docs/screenshots/vocab_preview.png)
-*Side-by-side view of the generated JSON and how it will appear in the main application.*
+_Side-by-side view of the generated JSON and how it will appear in the main application._
 
 ### 3. Import Functionality
-![Import Interface](docs/screenshots/import_interface.png)
-*The import interface allows reviewing and importing existing vocabulary files.*
 
-### 4. Student View (Main Application)
-![Student View](docs/screenshots/student_view.png)
-*How students will see the vocabulary in the main French Vocabulary Builder application.*
+![Import Interface](docs/screenshots/import_interface.png)
+_The import interface allows reviewing and importing existing vocabulary files._
 
 ## Features
 
@@ -101,22 +107,26 @@ vocab_importer/
 ## Setup and Installation
 
 1. Ensure you're in the project directory:
+
    ```bash
    cd lang-portal/vocab_importer
    ```
 
 2. Create and activate a virtual environment:
+
    ```bash
    python3 -m venv venv
    source venv/bin/activate  # On Windows: .\venv\Scripts\activate
    ```
 
 3. Install dependencies:
+
    ```bash
    pip install -r requirements.txt
    ```
 
 4. Verify the OpenAI API key is set in the parent directory's `.env` file:
+
    ```
    OPENAI_API_KEY=your_api_key_here
    ```
@@ -129,12 +139,14 @@ vocab_importer/
 ## Usage Tips
 
 1. **Generating Vocabulary**:
+
    - Choose a predefined topic or create a custom one
    - Select the type of words you need
    - Adjust the number of words to generate
    - Review the preview to see how it will look for students
 
 2. **Saving and Sharing**:
+
    - Use the 'Save to File' button to export vocabulary
    - Files are saved in JSON format
    - Share the files with students or import them into the main application
