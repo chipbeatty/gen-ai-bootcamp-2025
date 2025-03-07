@@ -32,38 +32,38 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-6xl mx-auto px-4">
-        <h1 className="text-3xl font-bold mb-8 text-center">
+    <div className="min-h-screen bg-gray-100">
+      <div className="max-w-6xl w-full mx-auto px-8 py-6">
+        <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
           French Vocabulary Builder
         </h1>
         
-        {/* Stats Section */}
+        {/* Stats Section - fixed height */}
         {!loading && !error && (
-          <div className="grid grid-cols-3 gap-4 mb-8">
-            <div className="bg-white p-4 rounded-lg shadow text-center">
-              <div className="text-2xl font-bold text-blue-600">
+          <div className="grid grid-cols-3 gap-8 mb-8">
+            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+              <div className="text-3xl font-bold text-blue-600">
                 {stats.success_rate?.toFixed(1)}%
               </div>
-              <div className="text-gray-600">Success Rate</div>
+              <div className="text-lg text-gray-600 mt-2">Success Rate</div>
             </div>
-            <div className="bg-white p-4 rounded-lg shadow text-center">
-              <div className="text-2xl font-bold text-green-600">
-                {stats.total_study_sessions}
+            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+              <div className="text-3xl font-bold text-blue-600">
+                {stats.total_study_sessions || 0}
               </div>
-              <div className="text-gray-600">Study Sessions</div>
+              <div className="text-lg text-gray-600 mt-2">Study Sessions</div>
             </div>
-            <div className="bg-white p-4 rounded-lg shadow text-center">
-              <div className="text-2xl font-bold text-purple-600">
-                {stats.study_streak_days}
+            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+              <div className="text-3xl font-bold text-blue-600">
+                {stats.study_streak_days || 0}
               </div>
-              <div className="text-gray-600">Day Streak</div>
+              <div className="text-lg text-gray-600 mt-2">Day Streak</div>
             </div>
           </div>
         )}
         
-        {/* No scrolling in content sections - full height display */}
-        <div className="min-h-[calc(100vh-12rem)]">
+        {/* Main content area - no scrolling */}
+        <div className="bg-gray-100 w-full">
           <VocabularyList 
             items={words} 
             loading={loading}
@@ -71,6 +71,6 @@ export default function Home() {
           />
         </div>
       </div>
-    </main>
+    </div>
   );
 }

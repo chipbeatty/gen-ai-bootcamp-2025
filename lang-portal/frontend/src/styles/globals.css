@@ -2,18 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Ensure content sections display at full height without scrolling */
-html, body {
-  height: 100%;
-  overflow-x: hidden;
+@layer base {
+  html, body {
+    @apply min-h-screen bg-gray-100;
+  }
 }
 
-/* Wide layout optimization */
-.content-wrapper {
-  @apply max-w-6xl mx-auto;
-}
+@layer components {
+  .vocab-item {
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    @apply bg-white rounded-lg shadow;
+  }
 
-/* Vocabulary item styling */
-.vocab-item {
-  @apply p-5 mb-4;
+  /* Three-line format */
+  .vocab-item > div {
+    @apply space-y-4;
+  }
+
+  /* Word line */
+  .vocab-item > div > div:first-child {
+    @apply flex;
+  }
+
+  /* Translation line */
+  .vocab-item > div > div:nth-child(2) {
+    @apply flex;
+  }
+
+  /* Context line */
+  .vocab-item > div > div:nth-child(3) {
+    @apply flex;
+  }
+
+  /* Labels */
+  .vocab-item > div > div > span:first-child {
+    @apply w-32 font-semibold;
+  }
+
+  /* Content */
+  .vocab-item > div > div > span:last-child,
+  .vocab-item > div > div > div {
+    @apply flex-1;
+  }
+
+  /* Progress info */
+  .vocab-item > div > div:last-child {
+    @apply text-sm text-gray-500 mt-4 pt-3 border-t flex items-center gap-2;
+  }
 }

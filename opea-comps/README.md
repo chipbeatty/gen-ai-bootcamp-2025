@@ -7,6 +7,7 @@ A focused implementation of the OPEA (Open Enterprise AI) architecture patterns,
 I took a more streamlined approach compared to the instructor's implementation:
 
 1. **Simplified Architecture**
+
    - Single chat service instead of multiple TTS services
    - Focused on core functionality needed for vocabulary learning
    - Integrated PostgreSQL for persistent chat history
@@ -16,9 +17,16 @@ I took a more streamlined approach compared to the instructor's implementation:
    - Simplified Docker setup with fewer services
    - FastAPI for both HTTP and WebSocket endpoints
 
+## Screenshots
+
+### 1. Main Interface
+
+![Main Interface](docs/screenshots/voice_chat_interface.png)
+
 ## User Interface and Interaction
 
 1. **Chat Interface**
+
    - Clean, wide layout to maximize readability
    - No scrolling in content sections - displays at full height
    - Clear visual separation between chat messages
@@ -38,12 +46,14 @@ I took a more streamlined approach compared to the instructor's implementation:
 ## Challenges Encountered
 
 1. **Model Limitations**
+
    - Had to use Tiny Llama due to memory constraints on local machine
    - Larger models would have provided better accuracy but required more resources
    - Encountered accuracy issues: model confused actor John Candy with George Costanza from Seinfeld
    - Need to implement better fact-checking or use a more reliable model
 
 2. **Docker Integration**
+
    - Initial issues with service discovery between containers
    - Needed to adjust port mappings to avoid conflicts
    - Learning curve with Docker networking concepts
@@ -56,6 +66,7 @@ I took a more streamlined approach compared to the instructor's implementation:
 ## Tools and Technologies Used
 
 - **Core Stack**:
+
   - `FastAPI`: Web framework and WebSocket support
   - `Ollama`: Local LLM hosting
   - `PostgreSQL`: Data persistence
@@ -72,6 +83,7 @@ I took a more streamlined approach compared to the instructor's implementation:
 This microservices architecture will enhance my French vocabulary builder by:
 
 1. **Scalability**
+
    - Easy integration of new AI models
    - Separate concerns for chat and future audio features
    - Flexible deployment options
@@ -84,10 +96,12 @@ This microservices architecture will enhance my French vocabulary builder by:
 ## Setup and Usage
 
 1. Install prerequisites:
+
    - Docker and Docker Compose
    - Python 3.11+
 
 2. Start the services:
+
 ```bash
 export LLM_MODEL_ID=llama2:7b
 docker compose up
@@ -102,6 +116,7 @@ docker compose up
 ## Development
 
 1. Set up local environment:
+
 ```bash
 python -m venv venv
 source venv/bin/activate
@@ -109,6 +124,7 @@ pip install -r requirements.txt
 ```
 
 2. Run locally:
+
 ```bash
 python -m app.main
 ```

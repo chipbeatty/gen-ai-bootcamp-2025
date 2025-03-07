@@ -1,6 +1,13 @@
 import React from 'react';
 import { Word } from '../services/api';
 
+const speak = (text: string) => {
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'fr-FR';
+  utterance.rate = 0.9; // Slightly slower for better pronunciation
+  window.speechSynthesis.speak(utterance);
+};
+
 interface VocabularyListProps {
   items: Word[];
   loading?: boolean;
@@ -22,36 +29,46 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ items, loading, 
 
   return (
     <div className="max-w-6xl mx-auto">
-      {items.map((item, index) => (
-        <div 
-          key={index}
-          className="p-5 mb-4 bg-white rounded-lg shadow"
-        >
-          <div className="space-y-1">
-            <div className="text-lg font-semibold">
-              Word: {item.french_word}
-              {item.pronunciation_url && (
+      {items.map((item) => (
+        <div key={item.id} className="vocab-item">
+          {/* Three-line format as per UI preferences */}
+          <div className="space-y-4">
+            {/* Line 1: Word */}
+            <div className="flex">
+              <span className="w-32 font-semibold">Word:</span>
+              <div className="flex-1 flex items-center">
+                <span className="text-xl">{item.french_word}</span>
                 <button 
-                  className="ml-2 text-blue-500 hover:text-blue-700"
-                  onClick={() => new Audio(item.pronunciation_url).play()}
+                  className="ml-3 text-blue-600 hover:text-blue-800 focus:outline-none"
+                  onClick={() => speak(item.french_word)}
+                  aria-label="Play pronunciation"
                 >
                   🔊
                 </button>
-              )}
+              </div>
             </div>
-            <div className="text-gray-700">
-              Translation: {item.english_translation}
+
+            {/* Line 2: Translation */}
+            <div className="flex">
+              <span className="w-32 font-semibold">Translation:</span>
+              <span className="flex-1">{item.english_translation}</span>
             </div>
+
+            {/* Line 3: Context (in italics) */}
             {item.context && (
-              <div className="text-gray-600 italic">
-                Context: {item.context}
+              <div className="flex">
+                <span className="w-32 font-semibold">Context:</span>
+                <span className="flex-1 italic">{item.context}</span>
               </div>
             )}
-            {(item.correct_count !== undefined || item.wrong_count !== undefined) && (
-              <div className="text-sm text-gray-500 mt-2">
-                Progress: {item.correct_count || 0} correct, {item.wrong_count || 0} incorrect
-              </div>
-            )}
+
+            {/* Progress info */}
+            <div className="text-sm text-gray-500 mt-4 pt-3 border-t flex items-center gap-2">
+              <span className="font-medium">Progress:</span>
+              <span>{item.correct_count} correct</span>
+              <span>•</span>
+              <span>{item.wrong_count} incorrect</span>
+            </div>
           </div>
         </div>
       ))}
