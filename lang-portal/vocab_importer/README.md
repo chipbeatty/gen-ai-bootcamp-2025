@@ -8,17 +8,17 @@ This tool is part of the French Vocabulary Builder project, designed to help tea
 
 ### 1. Main Interface
 
-![Main Interface](optimized_screenshots/main_interface.png)
+![Main Interface](docs/screenshots/main_interface.png)
 _The main interface shows the topic selection, word type options, and number of words to generate._
 
 ### 2. Generated Vocabulary Preview
 
-![Vocabulary Preview](optimized_screenshots/vocab_preview.png)
+![Vocabulary Preview](docs/screenshots/vocab_preview.png)
 _Side-by-side view of the generated JSON and how it will appear in the main application._
 
 ### 3. Import Functionality
 
-![Import Interface](optimized_screenshots/import_interface.png)
+![Import Interface](docs/screenshots/import_interface.png)
 _The import interface allows reviewing and importing existing vocabulary files._
 
 ## Workflow
