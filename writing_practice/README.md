@@ -15,11 +15,11 @@ A Streamlit-based web application for practicing French writing and listening sk
 
 ### 1. Listening Practice
 
-![Listening Practice](docs/screenshots/listening_practice.png)
+![Listening Practice](optimized_screenshots/listening_practice.png)
 
 ## 2. Writing Practice
 
-![Writing Practice](docs/screenshots/writing_practice.png)
+![Writing Practice](optimized_screenshots/writing_practice.png)
 
 ## Technical Stack
 
