@@ -8,29 +8,30 @@
 
 ## Screenshots
 
-### 1. Interface
+### 1. Main Interface
 
-![Interface](optimized_screenshots/interface.png)
+![Interface](docs/screenshots/interface.png)
+_Wide layout interface optimized for desktop viewing_
 
-### 2. Raw Transcript
+### 2. Raw Transcript View
 
-![Raw Transcript](optimized_screenshots/raw_transcript.png)
+![Raw Transcript](docs/screenshots/raw_transcript.png)
+_Full-height display with no scrolling required_
 
-### 3. Structured Data
-
-![Structured Data](docs/screenshots/structured_data.png)
-
-### 4. Structured Data
+### 3. Structured Data View
 
 ![Structured Data](docs/screenshots/structured_data.png)
+_Clear visual separation between content sections_
 
-### 5. Interactive Data (1)
+### 4. Interactive Learning (1)
 
-![Interactive Data (1)](optimized_screenshots/interactive_learning.png)
+![Interactive Data (1)](docs/screenshots/interactive_learning.png)
+_Wide layout (max-w-6xl) prevents text wrapping_
 
-### 5. Interactive Data (2)
+### 5. Interactive Learning (2)
 
-![Interactive Data (2)](optimized_screenshots/interactive_learning_2.png)
+![Interactive Data (2)](docs/screenshots/interactive_learning_2.png)
+_1.25rem padding maintains readability_
 
 ## Tools Used
 
