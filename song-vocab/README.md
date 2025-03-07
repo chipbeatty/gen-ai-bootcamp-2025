@@ -6,6 +6,54 @@ A tool that helps language learners build their French vocabulary through popula
 
 This application finds French song lyrics and extracts useful vocabulary with translations and context. It uses direct web scraping of lyrics sites combined with local AI for vocabulary analysis.
 
+## Agentic Workflow Implementation
+
+1. **User Interface Requirements**
+   - Display Format:
+     * No scrolling in content sections - full height display
+     * Wide layout (max-w-6xl) to prevent text wrapping
+     * Three-line vocabulary format:
+       ```
+       Word: [French word]
+       Translation: [English translation]
+       Context: [Usage example in italics]
+       ```
+     * Clear visual separation (padding: 1.25rem, margin-bottom: 1rem)
+
+2. **Agent Progress**
+   - Lyrics Processing:
+     * Autonomous search and extraction from paroles.net
+     * HTML parsing with BeautifulSoup4
+     * Character encoding handling for French accents
+   - Vocabulary Analysis:
+     * Local AI processing with Ollama/Mistral
+     * Context-aware word selection
+     * Proper formatting of translations and examples
+
+3. **Agentic Features**
+   - Independent Decision Making:
+     * Selects optimal lyrics source
+     * Validates French language content
+     * Chooses vocabulary based on difficulty
+   - Error Recovery:
+     * Handles rate limiting automatically
+     * Retries failed requests with backoff
+     * Validates output formatting
+
+4. **Development Journey**
+   - Initial Implementation:
+     * Basic web scraping agent
+     * Simple vocabulary extraction
+     * Fixed layout design
+   - Current State:
+     * Full agentic workflow
+     * Desktop-optimized interface
+     * Robust error handling
+   - Future Plans:
+     * Enhanced vocabulary selection
+     * Better context understanding
+     * More autonomous features
+
 ## Key Features
 
 - Search and fetch French song lyrics from paroles.net

@@ -2,6 +2,91 @@
 
 A focused implementation of the OPEA (Open Enterprise AI) architecture patterns, designed to support my French vocabulary learning project.
 
+## What is OPEA?
+
+OPEA (Open Enterprise AI) is an open-source architectural framework for building enterprise-grade AI applications. Key aspects include:
+
+1. **Microservices Architecture**
+   - Modular, independently deployable services
+   - Clear separation of concerns
+   - Scalable and maintainable design
+
+2. **AI-First Design**
+   - Built around AI/ML model integration
+   - Standardized interfaces for AI services
+   - Flexible model deployment strategies
+
+3. **Enterprise Features**
+   - High availability and fault tolerance
+   - Monitoring and observability
+   - Security and access control
+
+## How We Use OPEA
+
+In this implementation, OPEA principles guide our architecture in several ways:
+
+1. **Service Organization**
+   - Chat service as a standalone microservice
+   - Database service for persistent storage
+   - Clear API boundaries between components
+
+2. **AI Integration**
+   - Ollama for local LLM deployment
+   - Standardized chat completion endpoints
+   - WebSocket support for real-time AI interactions
+
+3. **Enterprise Patterns**
+   - Docker containerization for deployment
+   - Health checks and monitoring
+   - PostgreSQL for reliable data persistence
+
+## Implementation Progress
+
+1. **French Vocabulary Integration**
+   - Vocabulary Display Format:
+     * Three-line format for each item:
+       ```
+       Word: [French word]
+       Translation: [English translation]
+       Context: [Usage example in italics]
+       ```
+     * Clear visual separation (1.25rem padding, 1rem margin)
+     * Wide layout (max-w-6xl) prevents text wrapping
+   - Chat Interface:
+     * Real-time conversation via WebSocket
+     * Full-height display with no scrolling
+     * Desktop-optimized for readability
+
+2. **OPEA Architecture Progress**
+   - Core Components:
+     * Chat microservice with Ollama integration
+     * PostgreSQL for vocabulary and chat history
+     * Health check endpoints for monitoring
+   - Current Limitations:
+     * Using Tiny Llama (memory constraints)
+     * Single service implementation
+     * Basic error handling
+
+3. **Technical Achievements**
+   - Successfully Implemented:
+     * Docker containerization
+     * WebSocket real-time updates
+     * Database persistence
+   - Resolved Challenges:
+     * Service discovery between containers
+     * Database connection management
+     * Model deployment optimization
+
+4. **Vocabulary Learning Focus**
+   - AI Features:
+     * Context-aware translations
+     * Usage examples generation
+     * Real-time corrections
+   - Future Enhancements:
+     * Pronunciation assistance
+     * Progress tracking
+     * Vocabulary grouping
+
 ## Key Differences from Instructor's Version
 
 I took a more streamlined approach compared to the instructor's implementation:
